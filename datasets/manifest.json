@@ -1,0 +1,14 @@
+{
+  "support_intents": {
+    "version": "1.0.0",
+    "description": "Golden set for the Northwind Apparel support assistant: intent label plus reply constraints per customer message.",
+    "labels": ["return_request", "order_status", "size_question", "payment_issue", "complaint", "other"],
+    "changelog": [
+      {
+        "version": "1.0.0",
+        "date": "2026-11-21",
+        "changes": "Initial release: 38 cases incl. multilingual (Turkish/English), sarcasm, empty-ish and prompt-injection cases."
+      }
+    ]
+  }
+}

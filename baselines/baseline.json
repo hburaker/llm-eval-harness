@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "run_id": "baseline-v1",
+  "created_at": "2026-11-20T23:12:38+00:00",
+  "harness_version": "0.1.0",
+  "target": {
+    "name": "baseline",
+    "kind": "rule-based keyword classifier",
+    "model": "none"
+  },
+  "dataset": {
+    "name": "support_intents",
+    "version": "1.0.0",
+    "sha256": "5465bfd4cdb124d415edae5bdb0c7f484b8dd689622a8471a826a6060e2fae57",
+    "cases": 38
+  },
+  "scorers": [
+    "intent_match",
+    "keywords",
+    "reply_format",
+    "safety"
+  ],
+  "summary": {
+    "cases": 38,
+    "accuracy": 0.7631578947368421,
+    "macro_f1": 0.7401098901098901,
+    "case_pass_rate": 0.6842105263157895,
+    "errors": 0,
+    "per_intent": {
+      "return_request": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "support": 6
+      },
+      "order_status": {
+        "precision": 0.7142857142857143,
+        "recall": 0.8333333333333334,
+        "f1": 0.7692307692307692,
+        "support": 6
+      },
+      "size_question": {
+        "precision": 0.7142857142857143,
+        "recall": 1.0,
+        "f1": 0.8333333333333333,
+        "support": 5
+      },
+      "payment_issue": {
+        "precision": 1.0,
+        "recall": 0.6666666666666666,
+        "f1": 0.8,
+        "support": 6
+      },
+      "complaint": {
+        "precision": 1.0,
+        "recall": 0.4,
+        "f1": 0.5714285714285715,
+        "support": 5
+      },
+      "other": {
+        "precision": 0.6666666666666666,
+        "recall": 1.0,
+        "f1": 0.8,
+        "support": 10
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "return_request",
+        "order_status",
+        "size_question",
+        "payment_issue",
+        "complaint",
+        "other"
+      ],
+      "matrix": [
+        [
+          3,
+          0,
+          2,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          5,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          5,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          4,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          2,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          10
+        ]
+      ]
+    },
+    "scorer_pass_rates": {
+      "intent_match": 0.7631578947368421,
+      "keywords": 0.7241379310344828,
+      "reply_format": 1.0,
+      "safety": 0.9473684210526315
+    },
+    "scorers_skipped": [],
+    "latency_ms": {
+      "mean": 0.014552631578947369,
+      "p50": 0.013999999999999999,
+      "p95": 0.025,
+      "max": 0.033
+    }
+  }
+}
