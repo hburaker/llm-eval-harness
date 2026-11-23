@@ -204,6 +204,41 @@ llm-eval-harness/
 └── tests/                       # offline pytest suite
 ```
 
+## Enterprise use cases
+
+An eval harness is **automated testing for AI features**. Just like unit tests protect normal code,
+evals check that an AI assistant still gives correct, safe answers after every prompt, model or data
+change. In plain words: *keep a list of real questions with the expected answers, run the AI on all
+of them, score the results, and block the release if the scores drop.*
+
+| Scenario | What is tested | Example scorers | Decision it supports |
+|---|---|---|---|
+| **Customer-support chatbot release** | Intent detection and reply quality | Intent accuracy, required keywords, safety | "Is the new prompt safe to ship?" |
+| **Model upgrade / vendor comparison** | Same dataset on old vs. new model | Accuracy, F1, latency, cost per case | "Does the new model justify the price?" |
+| **Ticket / e-mail routing** | Classifying incoming requests to the right team | Per-class precision / recall, confusion matrix | "Which categories get mixed up most?" |
+| **RAG assistant quality** | Answers to HR / policy questions | Citation present, correct source, refusal when unknown | "Does the assistant still answer from the right document?" |
+| **Safety & compliance check** | Prompt injection, data leakage, tone | Safety scorer, LLM-as-judge rubric | "Can users trick the bot into breaking the rules?" |
+| **Continuous monitoring** | Weekly sample of real (anonymised) conversations | Pass rate trend over time | "Is quality drifting in production?" |
+
+**A simple example flow - updating a support-bot prompt**
+
+1. A developer changes the system prompt to make replies friendlier.
+2. The pull request triggers CI, which runs `python -m eval_harness run --target claude --gate baselines/baseline.json`.
+3. The harness runs all golden cases and scores them.
+4. Intent accuracy is unchanged, but the safety pass rate dropped from 95% to 85% because the new
+   prompt follows injected instructions.
+5. The regression gate fails, the PR turns red, and the problem is fixed **before** customers see it.
+
+**Why enterprises care**
+
+- **Objective go / no-go decisions** instead of "it looked fine in a few manual tries".
+- **Regression safety:** every prompt or model change is checked against the same cases.
+- **Cost and vendor decisions:** compare models on your own data, not on public benchmarks.
+- **Audit trail:** every report stores the dataset version and hash, useful for governance and compliance.
+
+**Moving this demo to production** usually means: a larger dataset built from anonymised real
+traffic, human review of a sample, dashboards for trends, and running evals on every release.
+
 ## Next steps
 
 - Repeat LLM runs (n ≥ 3) and report the mean with confidence intervals, so the gate tests
@@ -240,3 +275,20 @@ test edilir.
 
 Hızlı başlangıç: `pip install -e ".[dev]"`, ardından `python -m pytest` ve
 `python -m eval_harness run --target baseline --gate baselines/baseline.json`.
+
+### Kurumsal kullanım senaryoları
+
+Eval, **yapay zekâ özellikleri için otomatik testtir.** Normal yazılımda unit test ne işe yarıyorsa,
+eval de prompt, model veya veri her değiştiğinde asistanın hâlâ doğru ve güvenli cevap verdiğini
+kontrol eder.
+
+- **Chatbot sürüm kontrolü:** Yeni prompt yayına çıkmadan önce niyet doğruluğu ve güvenlik testinden geçer.
+- **Model yükseltme / tedarikçi karşılaştırması:** Aynı veri setinde eski ve yeni modelin doğruluk,
+  gecikme ve maliyeti karşılaştırılır.
+- **Talep / e-posta yönlendirme:** Gelen taleplerin doğru ekibe gidip gitmediği sınıf bazında ölçülür.
+- **RAG asistanı kalitesi:** Cevapların doğru belgeye atıf yapıp yapmadığı test edilir.
+- **Güvenlik ve uyum:** Prompt injection, veri sızıntısı ve üslup kontrol edilir.
+- **Sürekli izleme:** Anonimleştirilmiş gerçek konuşmalardan alınan örneklerle kalite trendi takip edilir.
+
+Basit örnek: Bir geliştirici prompt'u değiştirir, CI eval'i çalıştırır, güvenlik skoru %95'ten %85'e
+düşer, regresyon kapısı pull request'i kırmızıya çevirir ve sorun müşteriye ulaşmadan yakalanır.
